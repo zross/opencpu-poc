@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>This is something</div>
+    <div id="data"></div>
+  </body>
+  <script>
+    function createNode(element) {
+      return document.createElement(element);
+    }
+
+    function append(parent, el) {
+      return parent.appendChild(el);
+    }
+    const ul = document.getElementById("data");
+    fetch(
+      "http://ec2-52-55-105-245.compute-1.amazonaws.com/ocpu/library/testopencpu/R/hello/json",
+      {
+        method: "POST", // or 'PUT'
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ x: [1234, 20] }),
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        let authors = data;
+        return data.map(function (i) {
+          let li = createNode("li");
+          let span = createNode("span");
+          span.innerHTML = `${i}`;
+
+          append(li, span);
+          append(ul, li);
+        });
+      });
+  </script>
+</html>
