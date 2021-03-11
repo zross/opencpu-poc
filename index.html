@@ -4,11 +4,14 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>Document</title>
   </head>
   <body>
-    <div>This is something</div>
-    <div id="data"></div>
+    <h2>Get data using fetch</h2>
+    <div id="fetchdata"></div>
+    <h2>Get data using axios</h2>
+    <div id="axiosdata"></div>
   </body>
   <script>
     function createNode(element) {
@@ -18,7 +21,8 @@
     function append(parent, el) {
       return parent.appendChild(el);
     }
-    const ul = document.getElementById("data");
+    const fetchul = document.getElementById("fetchdata");
+
     fetch(
       "http://ec2-52-55-105-245.compute-1.amazonaws.com/ocpu/library/testopencpu/R/hello/json",
       {
@@ -26,20 +30,42 @@
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ x: [1234, 20] }),
+        body: JSON.stringify({ x: [1234, 30] }),
       }
     )
       .then((response) => response.json())
       .then((data) => {
-        let authors = data;
         return data.map(function (i) {
           let li = createNode("li");
           let span = createNode("span");
           span.innerHTML = `${i}`;
 
           append(li, span);
-          append(ul, li);
+          append(fetchul, li);
         });
+      });
+
+    const axiosul = document.getElementById("axiosdata");
+    axios
+      .post(
+        "http://ec2-52-55-105-245.compute-1.amazonaws.com/ocpu/library/testopencpu/R/hello/json",
+        {
+          x: "from zev axios",
+        }
+      )
+      .then(function (data) {
+        console.log(data.data);
+        return data.data.map(function (i) {
+          let li = createNode("li");
+          let span = createNode("span");
+          span.innerHTML = `${i}`;
+
+          append(li, span);
+          append(axiosul, li);
+        });
+      })
+      .catch(function (error) {
+        console.log(error);
       });
   </script>
 </html>
